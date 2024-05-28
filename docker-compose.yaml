@@ -19,14 +19,9 @@ services:
     image: neo4j:5.5
     volumes:
       - neo4j_data:/data
-      - ./data/releases/neo4j:/releases/
+      - ./data/neo4j:/releases/
     command: >
-      bash -c "neo4j-admin \ 
-      database \
-      load \
-      neo4j \
-      --from-path=/releases/ \
-      --overwrite-destination=true"
+      bash -c "neo4j-admin database load neo4j --from-path=/releases/ --overwrite-destination=true"
   neo4j:
     image: neo4j:5.5
     restart: always
@@ -64,7 +59,7 @@ services:
       PGUSER: 'mps_user'
       PGPASSWORD: 'mps_password'
     volumes:
-      - ./data/releases/postgres:/releases/
+      - ./data/postgres:/releases/
     command: >
       bash -c "mkdir -p /extracted/ &&
       tar -zxvf /releases/${POSTGRES_BACKUP_FILE:-public_release.tar.gz} --directory /extracted/ &&
