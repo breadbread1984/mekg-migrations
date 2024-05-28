@@ -60,6 +60,7 @@ services:
       PGPASSWORD: 'mps_password'
     volumes:
       - ./data/postgres:/releases/
+      - ./pg_data/:/var/lib/postgresql/data
     command: >
       bash -c "mkdir -p /extracted/ && tar -zxvf /releases/${POSTGRES_BACKUP_FILE:-public_release.tar.gz} --directory /extracted/ && psql -d postgres -c 'drop database if exists mps;' && createdb mps && psql -f /extracted/*.sql"
     depends_on:
@@ -74,7 +75,7 @@ services:
     ports:
       - 7777:5432
     volumes:
-      - pg_data:/var/lib/postgresql/data/
+      - ./pg_data:/var/lib/postgresql/data/
     healthcheck:
       test: pg_isready -U backend_user -d backend_db
       interval: 10s
